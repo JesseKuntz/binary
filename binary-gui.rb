@@ -1,8 +1,3 @@
-# binary.rb is a program that is able to convert from decimal to binary and vice versa.
-
-input = 0.0
-binary_number = ''
-
 # binary_to_integer takes in a binary number as a string and prints the integer equivalent
 def binary_to_integer(n)
   sum = 0
@@ -17,12 +12,11 @@ def binary_to_integer(n)
     elsif temp == '0'
       i += 1
     else
-      puts 'You did not enter a valid binary number.'
+      return 'You did not enter a valid binary number.'
       break
     end
   end
-  print 'Integer: '
-  puts sum
+  return 'Integer Result: ' + sum.to_s
 end
 
 def integer_to_binary(n)
@@ -56,34 +50,39 @@ def integer_to_binary(n)
     i += 1
   end
 
-  # print out the bit string backward
-  print 'Binary: '
+  # build the bit string backward
   i = bits.count - 1
+  result = ''
   while i >= 0
-    print bits[i]
+    result = result + bits[i].to_s
     i -= 1
   end
-  puts ''
+  return 'Binary Result: ' + result
 end
 
-puts '1. Convert from integer to binary. (no negative integers)'
-puts '2. Convert from binary to integer.'
-print 'Choose one: '
-choice = gets.to_i
-# calculate and print the binary equivalent
-if choice == 1 then
-  print 'Enter an integer: '
-  input = gets.to_i
-  integer_to_binary input
-# calculate and print the integer equivalent
-elsif choice == 2 then
-  print 'Enter a binary number: '
-  input = gets.chomp
-  binary_to_integer input
-# neither a 1 nor a 2 was entered
-else
-  puts 'You did not enter a valid choice.'
+Shoes.app(width: 400, height: 250) do
+  background "#213"
+    border("#1CA",
+           strokewidth: 6)
+  stack(margin: 12) do
+    para "Enter a binary number:", stroke: "#1CA"
+    flow do
+      @binaryBox = edit_line
+      @toInteger = button "Convert to integer"
+    end
+    para "Enter an integer:", stroke: "#1CA"
+    flow do
+      @integerBox = edit_line
+      @toBinary = button "Convert to binary"
+    end
+    @result = para "Result:", stroke: "#1CA"
+  end
+  @toInteger.click {
+    int_conversion = binary_to_integer @binaryBox.text
+    @result.replace int_conversion
+  }
+  @toBinary.click {
+    bin_conversion = integer_to_binary @integerBox.text.to_i
+    @result.replace bin_conversion
+  }
 end
-
-
-
